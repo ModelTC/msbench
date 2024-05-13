@@ -13,7 +13,7 @@ MSBench is an open-source model sparsification toolkit based on PyTorch fx.
 ## Quick start pts example without installation
 
 ```
-git clone git@gitlab.bj.sensetime.com:spring2/sparsity.git
+git clone https://github.com/ModelTC/msbench.git
 cd msbench/applications/imagenet_example/SAT
 # modify run_uniform.sh
 sh run_uniform.sh

@@ -2,7 +2,7 @@
 
 # cmd: sh run.sh
 
-msb=/home/yongyang/work/projects/msb/sparsity
+msb=/path to msbench file folder
 
 export PYTHONPATH=$msb:$PYTHONPATH
 

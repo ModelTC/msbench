@@ -1,0 +1,31 @@
+model:                    # architecture details
+    type: mobilenet_v2        # model name
+    kwargs:
+        num_classes: 1000
+    path: PATH_TO/checkpoints/mobilenetv2.pth.tar
+data:
+    path: PATH_TO/imagenet
+    batch_size: 64
+    num_workers: 4
+    pin_memory: True
+    input_size: 224
+    test_resize: 256
+sparse:
+    USE_ERK: True
+    erk_power_scale: 0.5
+    target_sparsity: 0.8
+    cali_batchsize: 32
+    reconstruction:
+        pattern: block
+        max_count: 20000
+        keep_gpu: True
+        weight_lr: 0.00001
+    mask_generator:
+      type: NormalMaskGenerator
+    fake_sparse:
+      type: FakeSparse
+    scheduler:
+      type: BaseScheduler
+
+saver:
+  save_dir: PATH_TO/ckpt_save_path/non_uniform/

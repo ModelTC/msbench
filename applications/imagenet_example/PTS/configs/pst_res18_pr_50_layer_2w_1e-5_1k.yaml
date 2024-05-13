@@ -1,0 +1,34 @@
+model:
+    type: resnet18
+    kwargs:
+        num_classes: 1000
+    path: /path-of-pretrained
+data:
+    path: /path-of-imagenet
+    batch_size: 64
+    num_workers: 4
+    pin_memory: True
+    input_size: 224
+    test_resize: 256
+sparse:
+    cali_batchsize: 16
+    reconstruction:
+        pattern: layer
+        max_count: 20000
+        keep_gpu: True # If cali_batchsize is too large, you will get out of memery error. You can set keep_gpu to False. 
+        weight_lr: 0.00001
+    mask_generator:
+      type: NormalMaskGenerator
+      kwargs:
+        structured: False
+    fake_sparse:
+      type: DefaultFakeSparse
+      kwargs:
+        mask_is_static: False
+    scheduler:
+      type: BaseScheduler
+    fuse_bn: False
+    set_sparsity: ERK
+    target_sparsity: 0.5
+saver:
+    save_dir: ./save

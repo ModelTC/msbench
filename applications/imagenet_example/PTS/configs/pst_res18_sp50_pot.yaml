@@ -1,0 +1,38 @@
+model:
+    type: resnet18
+    kwargs:
+        num_classes: 1000
+    path: /mnt/cache/yongyang/project/imagenet_pretrain/mXqXX.pth
+data:
+    path: /mnt/cache/yongyang/data/imagenet
+    batch_size: 64
+    num_workers: 4
+    pin_memory: True
+    input_size: 224
+    test_resize: 256
+sparse:
+    cali_batchsize: 160
+    reconstruction:
+        pattern: independent
+        max_count: 20000
+        keep_gpu: False # If cali_batchsize is too large, you will get out of memery error. You can set keep_gpu to False. 
+        weight_lr: 0.00001
+        bias_lr: 0.0001
+        bias_correction: True
+        use_dense_inps: True
+    mask_generator:
+      type: NormalMaskGenerator
+      kwargs:
+        structured: False
+    fake_sparse:
+      type: DefaultFakeSparse
+      kwargs:
+        mask_is_static: True
+        weight_correction: True
+    scheduler:
+      type: BaseScheduler
+    fuse_bn: True
+    set_sparsity: L2Normalized
+    target_sparsity: 0.5
+saver:
+    save_dir: ./save

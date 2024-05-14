@@ -179,3 +179,29 @@ class STRMaskGenerator(MaskGeneratorBase):
 
     def generate_mask(self, weight, scores):
         return (torch.abs(weight) > self.f(scores)).float()
+
+
+class BinActive(torch.autograd.Function):
+    @staticmethod
+    def forward(self, input):
+        self.save_for_backward(input)
+        size = input.size()
+        input = input.sign()
+        return input
+
+    @staticmethod
+    def backward(self, grad_output):
+        input, = self.saved_tensors
+        grad_input = grad_output.clone()
+        grad_input[input.ge(1)] = 0
+        grad_input[input.le(-1)] = 0
+        return grad_input
+
+class FCPTSMaskGenerator(MaskGeneratorBase):
+    def __init__(self, **kwargs):
+        super().__init__()
+        self.activation = torch.relu
+        self.f = torch.sigmoid
+
+    def generate_mask(self, weight, scores):
+        return 0.5 * BinActive.apply(torch.abs(weight) - self.f(scores)) + 0.5

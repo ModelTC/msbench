@@ -205,3 +205,20 @@ class STRFakeSparse(FakeSparseBase):
         if self.fake_sparse_enabled[0] == 1:
             X = self.generate_sparse_weight(X)
         return X
+
+class FCPTSFakeSparse(FakeSparseBase):
+    def __init__(self, generator=STRMaskGenerator, sInit_value=-200, **generator_kwargs) -> None:
+        super().__init__()
+        self.mask_generator = generator(**generator_kwargs)
+        self.scores = nn.Parameter(torch.ones(1, 1) * sInit_value, requires_grad=True)
+
+    @torch.jit.export
+    @torch.no_grad()
+    def generate_mask(self, metrics):
+        return self.mask_generator.generate_mask(metrics, self.scores)
+
+    def forward(self, X):
+        if self.fake_sparse_enabled[0] == 1:
+            mask = self.generate_mask(X)
+            X = X * mask
+        return X

@@ -3,8 +3,8 @@ from torch.fx import Tracer
 import torch.nn as nn
 from msbench.custom_sparser import ModelSparser
 from torch.fx.graph_module import GraphModule
-from msbench.fake_sparse import DefaultFakeSparse, ProbMaskFakeSparse, STRFakeSparse
-from msbench.mask_generator import NormalMaskGenerator, ProbMaskGenerator, STRMaskGenerator, NuclearMaskGenerator, FPGMMaskGenerator, NMMaskGenerator
+from msbench.fake_sparse import DefaultFakeSparse, ProbMaskFakeSparse, STRFakeSparse, FCPTSFakeSparse
+from msbench.mask_generator import NormalMaskGenerator, ProbMaskGenerator, STRMaskGenerator, NuclearMaskGenerator, FPGMMaskGenerator, NMMaskGenerator, FCPTSMaskGenerator
 from msbench.utils.fuse_bn import fuse
 from collections import namedtuple
 
@@ -15,12 +15,14 @@ MaskGeneratorTable = {
     'NuclearMaskGenerator': NuclearMaskGenerator,
     'FPGMMaskGenerator': FPGMMaskGenerator,
     'NMMaskGenerator': NMMaskGenerator,
+    'FCPTSMaskGenerator': FCPTSMaskGenerator
 }
 
 FakeSparseTable = {
     'DefaultFakeSparse': DefaultFakeSparse,
     'ProbMaskFakeSparse': ProbMaskFakeSparse,
-    'STRFakeSparse': STRFakeSparse
+    'STRFakeSparse': STRFakeSparse,
+    'FCPTSFakeSparse': FCPTSFakeSparse
 }
 
 
